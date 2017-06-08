@@ -1,0 +1,44 @@
+<1> 将单表导入数据库中，然后修改ConnectionFactory文件中连接数据库的参数：URL，account,password。
+<2> 创建要导入的三个表：
+————————————————————————————————————————————————————————
+DROP TABLE IF EXISTS `province`;
+
+CREATE TABLE `province` (
+  `PID` INT(11) NOT NULL AUTO_INCREMENT,
+  `Pcode` CHAR(11) DEFAULT NULL,
+  `Pname` VARCHAR(30) DEFAULT NULL,
+  PRIMARY KEY (`PID`)
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `city`;
+
+CREATE TABLE `city` (
+  `CID` INT(11) NOT NULL AUTO_INCREMENT,
+  `Ccode` CHAR(11) DEFAULT NULL,
+  `Cname` VARCHAR(30) DEFAULT NULL,
+  `ProvinceCode` CHAR(11) DEFAULT NULL,
+  PRIMARY KEY (`CID`)
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `areacounty`;
+
+CREATE TABLE `areacounty` (
+  `AID` INT(11) NOT NULL AUTO_INCREMENT,
+  `Acode` CHAR(11) DEFAULT NULL,
+  `Aname` VARCHAR(30) DEFAULT NULL,
+  `CityCode` CHAR(11) DEFAULT NULL,
+  PRIMARY KEY (`AID`)
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+————————————————————————————————————————————————————————
+<3> 执行TableChange测试文件
+<4> 执行成功后从数据库中删除tb_da_area表
+
+注意事项：
+	由于县的数量有点多所以执行时间有点长，下面是其在我的机器上执行的事件：
+testFist_ExportProvince方法执行时间为：2803毫秒
+testSecond_ExportCity方法执行时间为：24787毫秒
+testThird_ExportAreacounty方法执行时间为：159101毫秒
+	
+
+

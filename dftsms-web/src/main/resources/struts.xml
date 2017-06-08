@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="GBK"?>
+<!-- 指定Struts2配置文件的DTD信息 -->
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+"http://struts.apache.org/dtds/struts-2.3.dtd">
+<!-- Struts2配置文件的根元素 -->
+<struts>
+	<!-- 配置了系列常量 -->
+	<constant name="struts.custom.i18n.resources" value="resource" />
+	<constant name="struts.i18n.encoding" value="utf-8" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.objectFactory" value="spring" />
+	<!-- 专用模块配置 -->
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+	<constant name="struts.multipart.maxSize" value="10485760"></constant>
+	<constant name="struts.multipart.saveDir" value="/tmp"/>
+	<include file="cn/zlb/struts/business-struts2.xml"></include>
+	<include file="cn/zlb/struts/store-struts2.xml"></include>
+	<include file="cn/zlb/struts/goods-struts2.xml"></include>
+	<include file="cn/zlb/struts/order-struts2.xml"></include>
+	<include file="cn/zlb/struts/address-struts2.xml"></include>
+	
+	<!-- 通用模块配置 -->
+	<!-- 模块：0 -->
+	<package name="fxb_verify" namespace="/verify" extends="json-default">
+		<!-- 验证账户名称是否已被注册 -->
+		<action name="AccountNameIsRegistered" class="verifyBean"
+			method="verifyOnlyAccountNameIsExist">
+			<result type="json">
+				<param name="root">verifyOnlyAccountResult</param>
+			</result>
+		</action>
+		<!-- 验证手机号是否已被注册 -->
+		<action name="PhoneIsRegistered" class="verifyBean"
+			method="verifyOnlyAccountPhoneIsExist">
+			<result type="json">
+				<param name="root">verifyOnlyPoneResult</param>
+			</result>
+		</action>
+		<!-- 验证邮箱是否已被注册 -->
+		<action name="EmailIsRegistered" class="verifyBean"
+			method="verifyOnlyAccountEmailIsExist">
+			<result type="json">
+				<param name="root">verifyOnlyEmailResult</param>
+			</result>
+		</action>
+		<!-- 验证账号登录状态 -->
+		<action name="accountLoginStatus" class="verifyBean"
+			method="verifyAccountLoginStatus">
+			<result type="json">
+				<param name="root">verifyAccountLoginStatusResult</param>
+			</result>
+		</action>
+	</package>
+
+	<!-- 模块：1 -->
+	<package name="fxb_regist" namespace="/regist" extends="json-default">
+		<!-- 手机通过验证码注册账户——系统自动生成账户名 -->
+		<action name="RegistByPhoneAndPass_NoAccountName" class="registBean"
+			method="registbyPhoneAndPass_SysCreateName">
+			<result type="json">
+				<param name="root">registByPhoneAndPass_NoName_Result</param>
+			</result>
+		</action>
+		<!-- 手机通过验证码注册账户 -->
+		<action name="RegistByPhoneAndPass" class="registBean"
+			method="registbyPhoneAndPass">
+			<result type="json">
+				<param name="root">registByPhoneAndPass_Result</param>
+			</result>
+		</action>
+		<!-- 通过邮箱注册账户——系统自动生成账户名 -->
+		<action name="RegistByEmailAndPass_NoAccountName" class="registBean"
+			method="registByEmailAndPass_SysCreateName">
+			<result type="json">
+				<param name="root">registByEmailAndPass_NoName_Result</param>
+			</result>
+		</action>
+		<!-- 通过邮箱注册账户 -->
+		<action name="RegistByEmailAndPass" class="registBean"
+			method="registByEmailAndPass">
+			<result type="json">
+				<param name="root">registByEmailAndPass_Result</param>
+			</result>
+		</action>
+
+
+	</package>
+
+	<!-- 模块：2 -->
+	<package name="fxb_deleteAccount" namespace="/deleteAccount"
+		extends="json-default">
+		<action name="byID" class="deleteAccountBean" method="deleteAccountByID">
+			<result type="json">
+				<param name="root">deleteByIDResult</param>
+			</result>
+		</action>
+		<action name="byName" class="deleteAccountBean" method="deleteAccountByName">
+			<result type="json">
+				<param name="root">deleteByNameResult</param>
+			</result>
+		</action>
+	</package>
+
+	<!-- 模块：3 -->
+	<package name="fxb_UpdateAccount" namespace="/update" extends="json-default">
+		<!-- 根据账户的ID以及原密码更新账户的密码 -->
+		<action name="passwordByOldPass" class="UpdateAccountInfoBean"
+			method="updatePassByOldPass">
+			<result type="json">
+				<param name="root">updatePassByOldPassResult</param>
+			</result>
+		</action>
+		<!-- 根据账户的ID以及手机验证码更新账户的密码 -->
+		<action name="passwordByIdentifyCode" class="UpdateAccountInfoBean"
+			method="updatePassByIdentifyCode">
+			<result type="json">
+				<param name="root">updatePassByIdentifyCodeResult</param>
+			</result>
+		</action>
+		<!-- 根据账户的ID修改性别 -->
+		<action name="sexByID" class="UpdateAccountInfoBean" method="updateSexByID">
+			<result type="json">
+				<param name="root">updateSexByID</param>
+			</result>
+		</action>
+		<!-- 根据账户的ID修改手机号 -->
+		<action name="phoneByID" class="UpdateAccountInfoBean" method="updatePhoneByID">
+			<result type="json">
+				<param name="root">updatePhoneByID</param>
+			</result>
+		</action>
+		<!-- 根据账户的ID修改用户名 -->
+		<action name="accountNameByID" class="UpdateAccountInfoBean"
+			method="updateNameByID">
+			<result type="json">
+				<param name="root">updateNameByID</param>
+			</result>
+		</action>
+		<!-- 根据账户的ID修改头像 -->
+		<action name="pictureByID" class="UpdateAccountInfoBean"
+			method="updatePicByID">
+			<param name="savePath">/PIC</param>
+			<result type="json">
+				<param name="root">updatePicByID</param>
+			</result>
+		</action>
+
+	</package>
+
+	<!-- 模块：5 -->
+	<package name="fxb_Login" namespace="/login" extends="json-default">
+		<!-- 账户登录：通过账号/手机号/邮箱 加密码的方式 -->
+		<action name="ByPass" class="verifyBean" method="verifyAccountByPass">
+			<result type="json">
+				<param name="root">verifyAccountResult</param>
+			</result>
+		</action>
+		<!-- 账户登录：通过手机号及验证码的方式 -->
+		<action name="ByPhoneAndIdentifyCode" class="verifyBean"
+			method="loginByPhoneAndIdentifyCode">
+			<result type="json">
+				<param name="root">verifyPhoneAndIdentifyResult</param>
+			</result>
+		</action>
+		<!-- （过时）账户登录：通过手机号及验证码的方式 (执行前必须调用验证码验证接口) -->
+		<action name="ByPhoneAndIdentifyCode_NoIdentifyCheck" class="verifyBean"
+			method="loginByPhoneAndIdentifyCode_NoIdentifyCheck">
+			<result type="json">
+				<param name="root">verifyPhoneAndIdentifyResult</param>
+			</result>
+		</action>
+		<!-- 账户注销登录 -->
+		<action name="logOut" class="verifyBean" method="LogOut">
+			<result type="json">
+				<param name="root">logOutResult</param>
+			</result>
+		</action>
+	</package>
+
+	<!-- 模块：8 -->
+	<package name="fxb_indexData" namespace="/data" extends="json-default">
+		<!-- 请求首页数据 -->
+		<action name="index" class="InDexDataBean">
+			<result type="json">
+				<param name="root">resultData</param>
+			</result>
+			<result name="indexresult" type="json">
+				<param name="root">resultIndex</param>
+			</result>
+		</action>
+		<!-- 请求首页数据 -->
+		<action name="indexOfAndroid" class="InDexDataBean" method="AndroidData">
+			<result type="json">
+				<param name="root">resultAndroidDataAll</param>
+			</result>
+			<result name="NotAll" type="json">
+				<param name="root">resultAndroidData</param>
+			</result>
+		</action>
+		<!-- 根据分类获取数据 -->
+		<action name="bySort" class="InDexDataBean" method="AndroidDataBySort">
+			<result type="json">
+				<param name="root">resultAndroidData</param>
+			</result>
+		</action>
+		<!-- 根据商品的名称进行搜索 -->
+		<action name="byGoodName" class="InDexDataBean" method="AndroidDataByGoodName">
+		<result type="json">
+				<param name="root">resultAndroidData</param>
+			</result>
+		</action>
+		
+		<!-- 保存评论 -->
+		<action name="commentSave" class="InDexDataBean" method="saveComment">
+			<result type="json">
+				<param name="root">writeComment</param>
+			</result>
+		</action>
+		<!-- 获取商家所有评论 -->
+		<action name="storeAllComment" class="InDexDataBean" method="getStoreAllComment">
+			<result type="json">
+				<param name="root">resultComment_x</param>
+			</result>
+		</action>
+		<!-- 获取商家所有评论 -->
+		<action name="accountAllComment" class="InDexDataBean" method="getAccountAllComment">
+			<result type="json">
+				<param name="root">resultComment_x</param>
+			</result>
+		</action>
+		<!-- 收藏店铺 -->
+		<action name="saveCollection" class="InDexDataBean" method="saveCollection">
+			<result type="json">
+				<param name="root">collection</param>
+			</result>
+		</action>
+		<!-- 取消收藏店铺 -->
+		<action name="delCollection" class="InDexDataBean" method="deleteCollection">
+			<result type="json">
+				<param name="root">collection</param>
+			</result>
+		</action>
+		<!-- 获取所有收藏店铺 -->
+		<action name="getAllCollection" class="InDexDataBean" method="showAllCollection">
+			<result type="json">
+				<param name="root">resultCollection_x</param>
+			</result>
+		</action>
+		<action name="checkCollectionIsSave" class="InDexDataBean" method="checkCollectionIsSave">
+			<result type="json">
+				<param name="root">collectionIsSave</param>
+			</result>
+		</action>
+	</package>
+
+	<!-- 模块：9 -->
+	<package name="fxb_identifyCode" namespace="/IdentifyCode"
+		extends="json-default">
+		<!-- 请求发送验证码 -->
+		<action name="sendIdentifyCode" class="IdentifyCodeBean"
+			method="sentIdentifyCode">
+			<result type="json">
+				<param name="root">resultOfSend</param>
+			</result>
+		</action>
+		<!-- 检验验证码 -->
+		<action name="VerifyIdentifyCode" class="IdentifyCodeBean"
+			method="verifyIdentifyCode">
+			<result type="json">
+				<param name="root">resultVerify</param>
+			</result>
+		</action>
+		<!-- 请求发送邮箱验证链接 -->
+		<action name="sendEmailActiveLink" class="IdentifyCodeBean"
+			method="sendEmailActiveLink">
+			<result type="json">
+				<param name="root">resultOfSendEmail</param>
+			</result>
+		</action>
+		<!-- 检验邮箱验证链接 -->
+		<action name="VerifyEmailActiveLink" class="IdentifyCodeBean"
+			method="verifyEmailActiveLink">
+			<result type="json">
+				<param name="root">resultVerifyEmail</param>
+			</result>
+		</action>
+	</package>
+
+	<!-- 测试请求 -->
+	<package name="default" extends="struts-default">
+		<action name="fxb_*">
+			<result>/WEB-INF/content/fxb_Test/{1}.jsp</result>
+		</action>
+	</package>
+
+	<!-- 拦截错误请求 -->
+	<package name="fxb_special" extends="json-default">
+		<action name="*" class="specialBean" method="execute">
+			<result type="json">
+				<param name="root">resultValue</param>
+			</result>
+		</action>
+	</package>
+</struts>

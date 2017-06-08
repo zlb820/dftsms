@@ -1,0 +1,35 @@
+------------------------------------------------------------------------------------
+记录时间：2017年4月28日10:42:49
+状态：已解决
+难点：利用Hibernate，根据ID进行删除
+原因：数据库中的数据表与实体类对象的名称不是一一对应的，所以根据ID删除的时候需要指定数据库表名，最主要的是这个删除方法，我打算抽取成一个通用的方法，而不是在每个实体类中进行具体实现。
+难点需要解决问题：通过实体类获得数据库表名(利用HIbernate错误思路)
+解决方法：
+	调用Hibernate的SessionFactory的getAllClassMetadata方法获取所有映射的实体ClassMetadata，然后遍历每一个ClassMetadata，从而匹配表名或者实体类名。
+具体解决方法：
+	创建org.common.RBAC.dao.util.EntityAndTableMapping工具类，提供了两个方法：
+		1.getTableNameByEntityName：通过实体类名获取对应表名称
+		2.getEntityNameByTableName：通过表名称获取对应实体类名
+意外收获：
+	通过这种方式可以判断一个类型是否是已经配置的实体类型。
+注意事项：其获取到的类名是全路径名。
+参考资料：
+https://my.oschina.net/javawdw/blog/287888
+************************* 观念纠正 *************************
+	出现上面的观念的原因是对Hibernate的机制还不了解，HSQL是一个面向对象的SQL语言，我们编写HSQL语句的时候，所写的表名并不是我们数据库中所使用的表名，而是其对应的PO类的名称，Hibernate会自动将其转换。
+	如果使用上面的工具类进行转换，使用数据库底层表名，会报如下异常：
+org.hibernate.hql.internal.ast.QuerySyntaxException: 数据库表名 is not mapped [delete 数据库表名 en where en.id = ?0](注：从[]中就是编写的HSQL语句)
+	at org.hibernate.hql.internal.ast.QuerySyntaxException.generateQueryException(QuerySyntaxException.java:79)
+	at org.hibernate.QueryException.wrapWithQueryString(QueryException.java:103)
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.doCompile(QueryTranslatorImpl.java:218)
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.compile(QueryTranslatorImpl.java:142)
+	at org.hibernate.engine.query.spi.HQLQueryPlan.<init>(HQLQueryPlan.java:115)
+	at org.hibernate.engine.query.spi.HQLQueryPlan.<init>(HQLQueryPlan.java:76)
+	at org.hibernate.engine.query.spi.QueryPlanCache.getHQLQueryPlan(QueryPlanCache.java:150)
+	at org.hibernate.internal.AbstractSessionImpl.getHQLQueryPlan(AbstractSessionImpl.java:302)
+	at org.hibernate.internal.AbstractSessionImpl.createQuery(AbstractSessionImpl.java:240)
+参考资料：
+http://blog.csdn.net/merry3602/article/details/7063226
+------------------------------------------------------------------------------------
+
+

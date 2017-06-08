@@ -1,0 +1,30 @@
+<!DOCTYPE struts PUBLIC
+  "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+  "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="store" namespace="/sto" extends="struts-default" >
+		<action name="store_*" class="cn.zlb.action.StoreAction" method="store{1}">
+			<result name="success"  >
+			/WebRoot/bus/success.jsp
+			</result>
+		</action>
+	</package>
+	
+	
+	<!--android   -->
+	<package name="store_and" namespace="/and" extends="struts-default,json-default">
+			<action name="sto_*" class="cn.zlb.action.android.StoreActionAnd" method="sto{1}">
+    		<result name="failed">/business/success.jsp</result>
+    		<result name="storeResult"  type="json">
+    				<!-- parm 是在action中定义的 成员变量，必须有getter或setter方法 -->
+    				  <param name="root">storeInfo</param>  
+    		</result>
+    		 
+    	</action>
+	</package>
+	
+	
+    
+    
+  
+</struts>

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- 版本的声明，这样做可以一次性统一升级所有地方版本信息 -->
+	<properties>
+		<!-- 项目版本声明 -->
+		<project.version>0.0.1-SNAPSHOT</project.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<argLine>-Dfile.encoding=UTF-8</argLine>
+		<!-- 项目中所需依赖版本声明 -->
+		<junit.version>4.12</junit.version>
+		<dbunit.version>2.5.3</dbunit.version>
+		<springtestdbuni.version>1.1.0</springtestdbuni.version>
+		<hibernate.version>5.1.0.Final</hibernate.version>
+		<spring.version>4.2.5.RELEASE</spring.version>
+		<struts2.version>2.3.32</struts2.version>
+		<urlrewritefilter.version>4.0.3</urlrewritefilter.version>
+		<JSTL.version>1.2.5</JSTL.version>
+		<mysql.connector.version>5.1.42</mysql.connector.version>
+		<google.gson.verson>2.8.0</google.gson.verson>
+		<javax.mail.version>1.5.6</javax.mail.version>
+		<p6spy.version>3.0.0</p6spy.version>
+		<aspectj.version>1.6.12</aspectj.version>
+		<!-- 主要依赖库的版本定义 -->
+		<slf4j.version>1.7.2</slf4j.version>
+		<log4j.version>1.2.17</log4j.version>
+	</properties>
+
+	<!-- 项目坐标配置 -->
+	<groupId>edu.hebeu.dftsms</groupId>
+	<artifactId>dftsms</artifactId>
+	<version>${project.version}</version>
+	<name>Archetype - hjhg</name>
+	<url>http://maven.apache.org</url>
+	<packaging>pom</packaging>
+
+	<!-- 项目依赖的声明，注意这是顶级依赖配置，再此配置后，在模块中如果想引用，只需要注明依赖的groupId和artifactId即可 -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.3</version>
+			</dependency>
+			<!-- 引入JUnit依赖 -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<!-- 引入DbUnit依赖 -->
+			<dependency>
+				<groupId>org.dbunit</groupId>
+				<artifactId>dbunit</artifactId>
+				<version>${dbunit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.springtestdbunit</groupId>
+				<artifactId>spring-test-dbunit</artifactId>
+				<version>${springtestdbuni.version}</version>
+			</dependency>
+			<!-- 引入依赖 -->
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${google.gson.verson}</version>
+			</dependency>
+			<!-- 引入URL Rewrite依赖 -->
+			<dependency>
+				<groupId>org.tuckey</groupId>
+				<artifactId>urlrewritefilter</artifactId>
+				<version>${urlrewritefilter.version}</version>
+			</dependency>
+			<!-- 开始：引入JSTL依赖 -->
+			<dependency>
+				<groupId>org.apache.taglibs</groupId>
+				<artifactId>taglibs-standard-spec</artifactId>
+				<version>${JSTL.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.taglibs</groupId>
+				<artifactId>taglibs-standard-impl</artifactId>
+				<version>${JSTL.version}</version>
+			</dependency>
+			<!-- 结束：引入JSTL依赖 -->
+			<!-- 引入MySQL驱动 -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.connector.version}</version>
+			</dependency>
+			<!-- 引入javax.mail依赖 -->
+			<dependency>
+				<groupId>com.sun.mail</groupId>
+				<artifactId>javax.mail</artifactId>
+				<version>${javax.mail.version}</version>
+			</dependency>
+			<!-- 引入p6spy依赖 -->
+			<dependency>
+				<groupId>p6spy</groupId>
+				<artifactId>p6spy</artifactId>
+				<version>${p6spy.version}</version>
+			</dependency>
+			<!-- -->
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+
+			<!-- ***** 从这里往下是对三大框架的配置 ***** -->
+			<!-- 开始：Hibernate框架配置 -->
+			<!-- 导入Hibernate的核心依赖 -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<!-- 导入Hibernate的ENtity VERSioning支持 -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-envers</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<!-- 为Hibernate导入OSGi环境 -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-osgi</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<!-- 为Hibernate导入c3p0数据库连接池,proxool类同 -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-c3p0</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<!-- 为Hibernate导入EhCache缓存框架,infinispan类同 -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-ehcache</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<!-- 结束：Hibernate框架配置 -->
+
+			<!-- 开始：Spring框架配置 -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- 结束：Spring框架配置 -->
+
+			<!-- 开始：Struts框架配置 -->
+			<!-- Struts2核心依赖 -->
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-core</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<!-- 开始：Struts2的plugin配置 -->
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-spring-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-json-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-json-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-junit-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-cdi-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-codebehind-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-config-browser-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-convention-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-dojo-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-dwr-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-embeddedjsp-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-gxp-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-jasperreports-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-javatemplates-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-jsf-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-oval-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-pell-multipart-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-plexus-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-portlet-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-rest-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-sitegraph-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-sitemesh-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-struts1-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-testng-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-tiles-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-tiles3-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.struts</groupId>
+				<artifactId>struts2-osgi-plugin</artifactId>
+				<version>${struts2.version}</version>
+			</dependency>
+			<!-- 结束：Struts2的plugin配置 -->
+			<!-- 结束：Struts框架配置 -->
+
+			<!-- Log4j依赖 -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- common-logging 实际调用slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- java.util.logging 实际调用slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jul-to-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.lazyluke</groupId>
+				<artifactId>log4jdbc-remix</artifactId>
+				<version>0.2.7</version>
+				<scope>runtime</scope>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- 模块配置 -->
+	<modules>
+		<module>dftsms-web</module>
+		<module>common</module>
+		<module>specialPurpose</module>
+	</modules>
+</project>

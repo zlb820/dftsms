@@ -1,0 +1,21 @@
+<!-- 配置Hibernate的局部事务管理器，使用HibernateTransactionManager类 并注入SessionFactory的引用 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+		p:sessionFactory-ref="sessionFactory" />
+	<!-- 配置事务增强处理Bean,指定事务管理器 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<!-- 用于配置详细的事务语义 -->
+		<tx:attributes>
+			<!-- 所有以'get'开头的方法是read-only的 -->
+			<tx:method name="get* " read-only="true" />
+			<!-- 其他方法使用默认的事务设置 -->
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<!-- 配置一个切入点，匹配empManager和mgrManager 两个Bean的所有方法的执行 -->
+		<aop:pointcut id="leePointcut"
+			expression="bean(accountManage)" />
+		<!-- 指定在leePointcut切入点应用txAdvice事务增强处理 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="leePointcut" />
+	</aop:config>

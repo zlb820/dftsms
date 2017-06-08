@@ -1,0 +1,11 @@
+#移除Eclipse配置文件
+.settings
+*.project
+*.classpath
+#移除Maven生成文件
+target/
+#移除Windows系统操作word时的临时文件
+~*.docx
+~$*.docx
+~*.tmp
+*.tmp

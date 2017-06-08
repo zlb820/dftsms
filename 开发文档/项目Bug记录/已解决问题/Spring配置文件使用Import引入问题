@@ -1,0 +1,186 @@
+问题记录时间：2017年5月7日11:01:52
+问题级别：严重
+问题记录：启动Tomcat时报错
+问题场景：配置Spring的配置文件的时候,想采用分模块的方式,这样配置起来更加清晰明了
+问题原因：配置文件路径不对
+解决过程:
+	查看报错信息是配置文件引入异常,查看下面的具体提示可以看到:**\WEB-INF\WEB-INF\config\DaoContext.xml (系统找不到指定的路径。)
+	很显然出现了两次\WEB-INF,其中一次是我使用Import的时候添加的.去掉就OK了.
+心得:
+	Spring中Import时自动是在\WEB-INF目录下查找,不过这样有一点缺憾,就是使用Ctrl+鼠标左键无法检查路径是否正确.
+纠正:
+	从上面的情况,我们很容易想到是从\WEB-INF目录下开始查找,其实默认的Spring配置文件applicationContext.xml文件在\WEB-INF目录下,我换了一种场景,不再WEB-INF目录下的Bean配置文件中Import其它配置文件,同样遇到了下面类似问题.
+	综上所述,Spring的Import机制是从该Import所在的目录为根目录进行检索.
+-----------------------------------控制台异常记录-----------------------------------
+严重: Context initialization failed
+org.springframework.beans.factory.parsing.BeanDefinitionParsingException: Configuration problem: Failed to import bean definitions from relative location [/WEB-INF/config/DaoContext.xml]
+Offending resource: ServletContext resource [/WEB-INF/applicationContext.xml]; nested exception is org.springframework.beans.factory.BeanDefinitionStoreException: IOException parsing XML document from URL [file:/E:/Develop%20Software/Apache/Tomcat_8.0/wtpwebapps/dftsms-web/WEB-INF/WEB-INF/config/DaoContext.xml]; nested exception is java.io.FileNotFoundException: E:\Develop Software\Apache\Tomcat_8.0\wtpwebapps\dftsms-web\WEB-INF\WEB-INF\config\DaoContext.xml (系统找不到指定的路径。)
+	at org.springframework.beans.factory.parsing.FailFastProblemReporter.error(FailFastProblemReporter.java:70)
+	at org.springframework.beans.factory.parsing.ReaderContext.error(ReaderContext.java:85)
+	at org.springframework.beans.factory.parsing.ReaderContext.error(ReaderContext.java:76)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.importBeanDefinitionResource(DefaultBeanDefinitionDocumentReader.java:255)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.parseDefaultElement(DefaultBeanDefinitionDocumentReader.java:180)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.parseBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:165)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.doRegisterBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:138)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.registerBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:94)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.registerBeanDefinitions(XmlBeanDefinitionReader.java:508)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:392)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:336)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:188)
+	at org.springframework.web.context.support.XmlWebApplicationContext.loadBeanDefinitions(XmlWebApplicationContext.java:125)
+	at org.springframework.web.context.support.XmlWebApplicationContext.loadBeanDefinitions(XmlWebApplicationContext.java:94)
+	at org.springframework.context.support.AbstractRefreshableApplicationContext.refreshBeanFactory(AbstractRefreshableApplicationContext.java:129)
+	at org.springframework.context.support.AbstractApplicationContext.obtainFreshBeanFactory(AbstractApplicationContext.java:609)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:510)
+	at org.springframework.web.context.ContextLoader.configureAndRefreshWebApplicationContext(ContextLoader.java:444)
+	at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:326)
+	at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:107)
+	at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4853)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5314)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:145)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1408)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1398)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.springframework.beans.factory.BeanDefinitionStoreException: IOException parsing XML document from URL [file:/E:/Develop%20Software/Apache/Tomcat_8.0/wtpwebapps/dftsms-web/WEB-INF/WEB-INF/config/DaoContext.xml]; nested exception is java.io.FileNotFoundException: E:\Develop Software\Apache\Tomcat_8.0\wtpwebapps\dftsms-web\WEB-INF\WEB-INF\config\DaoContext.xml (系统找不到指定的路径。)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:344)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.importBeanDefinitionResource(DefaultBeanDefinitionDocumentReader.java:244)
+	... 28 more
+Caused by: java.io.FileNotFoundException: E:\Develop Software\Apache\Tomcat_8.0\wtpwebapps\dftsms-web\WEB-INF\WEB-INF\config\DaoContext.xml (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileInputStream.<init>(FileInputStream.java:93)
+	at sun.net.www.protocol.file.FileURLConnection.connect(FileURLConnection.java:90)
+	at sun.net.www.protocol.file.FileURLConnection.getInputStream(FileURLConnection.java:188)
+	at org.springframework.core.io.UrlResource.getInputStream(UrlResource.java:168)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:330)
+	... 32 more
+
+五月 07, 2017 11:00:35 上午 org.apache.catalina.core.StandardContext listenerStart
+严重: Exception sending context initialized event to listener instance of class org.springframework.web.context.ContextLoaderListener
+org.springframework.beans.factory.parsing.BeanDefinitionParsingException: Configuration problem: Failed to import bean definitions from relative location [/WEB-INF/config/DaoContext.xml]
+Offending resource: ServletContext resource [/WEB-INF/applicationContext.xml]; nested exception is org.springframework.beans.factory.BeanDefinitionStoreException: IOException parsing XML document from URL [file:/E:/Develop%20Software/Apache/Tomcat_8.0/wtpwebapps/dftsms-web/WEB-INF/WEB-INF/config/DaoContext.xml]; nested exception is java.io.FileNotFoundException: E:\Develop Software\Apache\Tomcat_8.0\wtpwebapps\dftsms-web\WEB-INF\WEB-INF\config\DaoContext.xml (系统找不到指定的路径。)
+	at org.springframework.beans.factory.parsing.FailFastProblemReporter.error(FailFastProblemReporter.java:70)
+	at org.springframework.beans.factory.parsing.ReaderContext.error(ReaderContext.java:85)
+	at org.springframework.beans.factory.parsing.ReaderContext.error(ReaderContext.java:76)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.importBeanDefinitionResource(DefaultBeanDefinitionDocumentReader.java:255)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.parseDefaultElement(DefaultBeanDefinitionDocumentReader.java:180)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.parseBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:165)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.doRegisterBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:138)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.registerBeanDefinitions(DefaultBeanDefinitionDocumentReader.java:94)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.registerBeanDefinitions(XmlBeanDefinitionReader.java:508)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.doLoadBeanDefinitions(XmlBeanDefinitionReader.java:392)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:336)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:188)
+	at org.springframework.web.context.support.XmlWebApplicationContext.loadBeanDefinitions(XmlWebApplicationContext.java:125)
+	at org.springframework.web.context.support.XmlWebApplicationContext.loadBeanDefinitions(XmlWebApplicationContext.java:94)
+	at org.springframework.context.support.AbstractRefreshableApplicationContext.refreshBeanFactory(AbstractRefreshableApplicationContext.java:129)
+	at org.springframework.context.support.AbstractApplicationContext.obtainFreshBeanFactory(AbstractApplicationContext.java:609)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:510)
+	at org.springframework.web.context.ContextLoader.configureAndRefreshWebApplicationContext(ContextLoader.java:444)
+	at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:326)
+	at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:107)
+	at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4853)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5314)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:145)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1408)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1398)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.springframework.beans.factory.BeanDefinitionStoreException: IOException parsing XML document from URL [file:/E:/Develop%20Software/Apache/Tomcat_8.0/wtpwebapps/dftsms-web/WEB-INF/WEB-INF/config/DaoContext.xml]; nested exception is java.io.FileNotFoundException: E:\Develop Software\Apache\Tomcat_8.0\wtpwebapps\dftsms-web\WEB-INF\WEB-INF\config\DaoContext.xml (系统找不到指定的路径。)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:344)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:304)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:181)
+	at org.springframework.beans.factory.support.AbstractBeanDefinitionReader.loadBeanDefinitions(AbstractBeanDefinitionReader.java:217)
+	at org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader.importBeanDefinitionResource(DefaultBeanDefinitionDocumentReader.java:244)
+	... 28 more
+Caused by: java.io.FileNotFoundException: E:\Develop Software\Apache\Tomcat_8.0\wtpwebapps\dftsms-web\WEB-INF\WEB-INF\config\DaoContext.xml (系统找不到指定的路径。)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileInputStream.<init>(FileInputStream.java:93)
+	at sun.net.www.protocol.file.FileURLConnection.connect(FileURLConnection.java:90)
+	at sun.net.www.protocol.file.FileURLConnection.getInputStream(FileURLConnection.java:188)
+	at org.springframework.core.io.UrlResource.getInputStream(UrlResource.java:168)
+	at org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:330)
+	... 32 more
+
+五月 07, 2017 11:00:35 上午 org.apache.catalina.core.StandardContext startInternal
+严重: One or more listeners failed to start. Full details will be found in the appropriate container log file
+五月 07, 2017 11:00:35 上午 org.apache.catalina.core.StandardContext startInternal
+严重: Context [/dftsms-web] startup failed due to previous errors
+五月 07, 2017 11:00:35 上午 org.apache.catalina.core.ApplicationContext log
+信息: Closing Spring root WebApplicationContext
+五月 07, 2017 11:00:35 上午 org.springframework.web.context.support.XmlWebApplicationContext doClose
+信息: Closing Root WebApplicationContext: startup date [Sun May 07 11:00:35 CST 2017]; root of context hierarchy
+五月 07, 2017 11:00:35 上午 org.springframework.web.context.support.XmlWebApplicationContext doClose
+警告: Exception thrown from LifecycleProcessor on context close
+java.lang.IllegalStateException: LifecycleProcessor not initialized - call 'refresh' before invoking lifecycle methods via the context: Root WebApplicationContext: startup date [Sun May 07 11:00:35 CST 2017]; root of context hierarchy
+	at org.springframework.context.support.AbstractApplicationContext.getLifecycleProcessor(AbstractApplicationContext.java:415)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:975)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:934)
+	at org.springframework.web.context.ContextLoader.closeWebApplicationContext(ContextLoader.java:581)
+	at org.springframework.web.context.ContextLoaderListener.contextDestroyed(ContextLoaderListener.java:116)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4900)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5537)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:221)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:149)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1408)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1398)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+五月 07, 2017 11:00:35 上午 org.apache.catalina.core.StandardContext listenerStop
+严重: Exception sending context destroyed event to listener instance of class org.springframework.web.context.ContextLoaderListener
+java.lang.IllegalStateException: BeanFactory not initialized or already closed - call 'refresh' before accessing beans via the ApplicationContext
+	at org.springframework.context.support.AbstractRefreshableApplicationContext.getBeanFactory(AbstractRefreshableApplicationContext.java:170)
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1006)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:982)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:934)
+	at org.springframework.web.context.ContextLoader.closeWebApplicationContext(ContextLoader.java:581)
+	at org.springframework.web.context.ContextLoaderListener.contextDestroyed(ContextLoaderListener.java:116)
+	at org.apache.catalina.core.StandardContext.listenerStop(StandardContext.java:4900)
+	at org.apache.catalina.core.StandardContext.stopInternal(StandardContext.java:5537)
+	at org.apache.catalina.util.LifecycleBase.stop(LifecycleBase.java:221)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:149)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1408)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1398)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+五月 07, 2017 11:00:35 上午 org.apache.catalina.startup.HostConfig deployDirectory
+信息: Deploying web application directory E:\Develop Software\Apache\Tomcat_8.0\webapps\docs
+五月 07, 2017 11:00:35 上午 org.apache.catalina.startup.HostConfig deployDirectory
+信息: Deployment of web application directory E:\Develop Software\Apache\Tomcat_8.0\webapps\docs has finished in 75 ms
+五月 07, 2017 11:00:35 上午 org.apache.catalina.startup.HostConfig deployDirectory
+信息: Deploying web application directory E:\Develop Software\Apache\Tomcat_8.0\webapps\manager
+五月 07, 2017 11:00:36 上午 org.apache.catalina.startup.HostConfig deployDirectory
+信息: Deployment of web application directory E:\Develop Software\Apache\Tomcat_8.0\webapps\manager has finished in 100 ms
+五月 07, 2017 11:00:36 上午 org.apache.catalina.startup.HostConfig deployDirectory
+信息: Deploying web application directory E:\Develop Software\Apache\Tomcat_8.0\webapps\ROOT
+五月 07, 2017 11:00:36 上午 org.apache.catalina.startup.HostConfig deployDirectory
+信息: Deployment of web application directory E:\Develop Software\Apache\Tomcat_8.0\webapps\ROOT has finished in 34 ms
+五月 07, 2017 11:00:36 上午 org.apache.coyote.AbstractProtocol start
+信息: Starting ProtocolHandler ["http-nio-8080"]
+五月 07, 2017 11:00:36 上午 org.apache.coyote.AbstractProtocol start
+信息: Starting ProtocolHandler ["ajp-nio-8009"]
+五月 07, 2017 11:00:36 上午 org.apache.catalina.startup.Catalina start
+信息: Server startup in 6140 ms

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 指定Spring配置文件的Schema信息 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+	<!-- 配置业务逻辑组件 -->
+	<bean name="sendIdentifyCodeManager"
+		class="org.common.miaodiyun.IdentifyCode.SendIdentifyCodeManager" />
+	<bean name="accountManagerTemplate" abstract="true" lazy-init="true"
+		p:accountManager-ref="accountManage" />
+	<bean name="dataManagerTemplate" abstract="true" lazy-init="true"
+		p:infoManage-ref="infoManage" />
+
+	<!-- 配置Action组件 -->
+	<bean name="specialBean" class="dftsms.web.fxb.action.SpecialAction" />
+	<bean name="IdentifyCodeBean" class="dftsms.web.fxb.action.IdentifyCodeAction"
+		p:sendIdentifyCodeManager-ref="sendIdentifyCodeManager"
+		p:accountManager-ref="accountManage" />
+	<bean name="registBean" class="dftsms.web.fxb.action.RegistAction"
+		parent="accountManagerTemplate" />
+	<bean name="verifyBean" class="dftsms.web.fxb.action.VerifyAccountAction"
+		parent="accountManagerTemplate" />
+	<bean name="deleteAccountBean" class="dftsms.web.fxb.action.DeleteAccountAction"
+		parent="accountManagerTemplate" />
+	<bean name="UpdateAccountInfoBean" class="dftsms.web.fxb.action.UpdateAccountInfoAction"
+		parent="accountManagerTemplate" />
+	<bean name="InDexDataBean" class="dftsms.web.fxb.action.InDexDataAction"
+		parent="dataManagerTemplate" />
+</beans>

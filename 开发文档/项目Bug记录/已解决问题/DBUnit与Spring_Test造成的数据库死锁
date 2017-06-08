@@ -1,0 +1,94 @@
+问题记录时间：2017年5月3日21:45:46
+问题级别：严重
+问题记录：java.sql.SQLException: Lock wait timeout exceeded; try restarting transaction
+问题场景：采用DBUnit进行还原数据库的时候，测试卡死直到超时。
+问题原因：在JUnit测试的时候，使用DBUnit在Before中进行数据库备份，在After中进行数据库还原。然而测试代码中包含插入操作时就会出现如下异常（删除和更新也会），初步理解原因是Spring事务还没有提交，所以锁还没有解除，此时还原数据库只能等待，然而解锁的操作在其后面因此造成了死锁。
+-----------------------------------控制台异常记录-----------------------------------
+java.sql.SQLException: Lock wait timeout exceeded; try restarting transaction
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1078)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4190)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4122)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2570)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2731)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2812)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2761)
+	at com.mysql.jdbc.StatementImpl.execute(StatementImpl.java:894)
+	at com.mysql.jdbc.StatementImpl.execute(StatementImpl.java:732)
+	at org.dbunit.database.statement.SimpleStatement.executeBatch(SimpleStatement.java:69)
+	at org.dbunit.operation.DeleteAllOperation.execute(DeleteAllOperation.java:126)
+	at org.dbunit.operation.CompositeOperation.execute(CompositeOperation.java:79)
+	at org.common.test.util.DBUnit_Util.resume(DBUnit_Util.java:131)
+	at org.common.test.util.AbstranctDbUnit.tearDown(AbstranctDbUnit.java:49)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:33)
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:86)
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:84)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:254)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:89)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:70)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:193)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+五月 03, 2017 9:51:41 下午 org.springframework.test.context.transaction.TransactionContext endTransaction
+信息: Rolled back transaction for test context [DefaultTestContext@5486887b testClass = TestAccount, testInstance = org.common.test.daoTest.TestAccount@5226e402, testMethod = testRegist_coAllMessage@TestAccount, testException = [null], mergedContextConfiguration = [MergedContextConfiguration@7f4037ed testClass = TestAccount, locations = '{classpath:daoContext.xml, classpath:beans.xml}', classes = '{}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{}', contextLoader = 'org.springframework.test.context.support.DelegatingSmartContextLoader', parent = [null]]].
+
+------------------------------结束：控制台异常记录-----------------------------------
+
+分析：
+	DBUnit进行数据库的备份还原是在测试方法的前后，也就是Before注解和After注解，然而@Transactional开启了事务管理，那么事务管理开启的时机在何时呢？
+下面进行测试：
+	测试过程很简单在@Before与@After方法以及测试方法中加入输出语句。
+-----------------------------------控制台信息记录-----------------------------------
+五月 03, 2017 10:00:24 下午 org.springframework.test.context.transaction.TransactionContext startTransaction
+信息: Began transaction (1) for test context [DefaultTestContext@5486887b testClass = TestAccount, testInstance = org.common.test.daoTest.TestAccount@5226e402, testMethod = testRegist_coAllMessage@TestAccount, testException = [null], mergedContextConfiguration = [MergedContextConfiguration@7f4037ed testClass = TestAccount, locations = '{classpath:daoContext.xml, classpath:beans.xml}', classes = '{}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{}', contextLoader = 'org.springframework.test.context.support.DelegatingSmartContextLoader', parent = [null]]]; transaction manager [org.springframework.orm.hibernate5.HibernateTransactionManager@1440c311]; rollback [true]
+正在执行Before方法。。。。
+正在执行测试代码。。。
+正在执行After方法。。。。
+五月 03, 2017 10:00:24 下午 org.springframework.test.context.transaction.TransactionContext endTransaction
+信息: Rolled back transaction for test context [DefaultTestContext@5486887b testClass = TestAccount, testInstance = org.common.test.daoTest.TestAccount@5226e402, testMethod = testRegist_coAllMessage@TestAccount, testException = [null], mergedContextConfiguration = [MergedContextConfiguration@7f4037ed testClass = TestAccount, locations = '{classpath:daoContext.xml, classpath:beans.xml}', classes = '{}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{}', contextLoader = 'org.springframework.test.context.support.DelegatingSmartContextLoader', parent = [null]]].
+-------------------------------结束：控制台信息记录-----------------------------------
+	从上面的数据结果不难发现其顺序：开启事务——> 执行@Before ——> 执行测试 ——> 执行@After ——> 结束事务 ——> 回滚事务
+	这样就造成了上面的问题，执行测试的时候因为在事务中，所以被加锁了，在执行@After操作的时候来还原数据库，但是此时事务还没有结束，意味着锁还没有释放，就在此等待，而解锁操作在其后面，这也就造成了死锁。
+
+解决方法：
+	抛弃自动编写代码的方式实现数据库的备份和还原，采用spring-test-dbunit插件来将Spring与DBUnit进行集成
+详细教程请参考官方文档：https://github.com/springtestdbunit/spring-test-dbunit
+过程：
+<1> 配置@TestExecutionListeners注解从而可以启用DBUnit注解，配置方式如下:
+	@RunWith(SpringJUnit4ClassRunner.class)
+	@ContextConfiguration
+	@Transactional
+	@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+			DirtiesContextTestExecutionListener.class,
+			TransactionDbUnitTestExecutionListener.class })
+<2> 配置数据源
+	官方解释：In order to access the database,Spring DBUnit requires a bean to be registered in your test context.By default a bean named dbUnitDatabaseConnection or dataSource
+	在Spring与Hibernate整合的时候已经配置，配置示例如下：
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+		<property name="url" value="jdbc:hsqldb:mem:paging" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+	</bean>
+	一旦上面两步完成，就可以使用DBUnit注解了。
+	官方解释：Once you have configured the DbUnitTestExecutionListener and provided the bean to access you database you can use the DBUnit annotations.
+<3> 	
+		

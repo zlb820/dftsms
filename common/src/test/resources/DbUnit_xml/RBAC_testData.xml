@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- t_pictures数据表数据 -->
+	<t_pictures PK_PIC_ID="0011" PIC_ATTR="1" PIC_DES="描述1"
+		PIC_URL="URL1" />
+	<t_pictures PK_PIC_ID="0021" PIC_ATTR="2" PIC_DES="描述2"
+		PIC_URL="URL2" />
+
+	<!-- t_customer数据表数据 -->
+	<t_customer PK_CUS_ID="001" CUS_NAME="fanxiaobin" CUS_PASS="123"
+		CUS_SEX="1" CUS_EMAIL="577328725@qq.com" CUS_PHONE="18930207737"
+		CUS_TIME="2017-03-25 12:21:00" FK_PICTURE="0011" CUS_STATUS="1"
+		EM_ACTICODE="NULL" EM_STATUS="0" EM_TOKEN_EXPTIME="NULL" />
+	<t_customer PK_CUS_ID="002" CUS_NAME="范晓宾" CUS_PASS="123"
+		CUS_SEX="1" CUS_EMAIL="1475610721@qq.com" CUS_PHONE="18930207738"
+		CUS_TIME="2017-03-25 12:21:00" FK_PICTURE="0021" CUS_STATUS="1"
+		EM_ACTICODE="NULL" EM_STATUS="0" EM_TOKEN_EXPTIME="NULL" />
+
+	<!-- t_role数据表数据 -->
+	<t_role PK_ROLE_ID="001" ROL_DESCRIBE="游客" />
+	<t_role PK_ROLE_ID="002" ROL_DESCRIBE="管理员" />
+
+	<!-- t_power数据表数据 -->
+	<t_power PK_POWER_ID="001" POW_DESCRIBE="普通" />
+	<t_power PK_POWER_ID="002" POW_DESCRIBE="超级权限" />
+
+	<!-- t_customer_role关联表数据 -->
+	<t_customer_role FK_CUSTOMER="001" FK_ROLE="001" />
+	<t_customer_role FK_CUSTOMER="002" FK_ROLE="002" />
+
+	<!-- t_role_power关联表数据 -->
+	<t_role_power FK_ROLE="001" FK_POWER="001" />
+	<t_role_power FK_ROLE="002" FK_POWER="002" />
+
+</dataset>

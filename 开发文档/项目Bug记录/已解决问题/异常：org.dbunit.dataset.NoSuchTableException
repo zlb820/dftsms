@@ -1,0 +1,7 @@
+问题记录时间：2017年4月24日09:49:36
+问题级别：严重
+问题记录：org.dbunit.dataset.NoSuchTableException
+问题场景：采用DBUnit进行写入数据的时候，提示没有数据表异常，但是查看数据库还是数据文件，都存在并且一一对应。
+问题原因：dbunit对SCHEMA的名字要求必须是大写.可谓是不小的bug.
+参考资料：
+http://www.fx114.net/qa-20-142879.aspx

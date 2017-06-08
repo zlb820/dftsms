@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	<!-- 加载配置文件 -->
+	<!-- <context:property-placeholder location="/WEB-INF/config/config.properties" /> -->
+	<context:property-placeholder location="/WEB-INF/config/config.properties" />
+	<!-- 定义数据源Bean，使用C3P0数据源实现 -->
+	<!-- 并设置连接数据库的驱动、URL、用户名、密码， 连接池最大连接数、最小连接数、初始连接数等参数 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close" p:driverClass="${driver}" p:jdbcUrl="${url}"
+		p:user="${account}" p:password="${password}" p:maxPoolSize="200"
+		p:minPoolSize="2" p:initialPoolSize="2" p:maxIdleTime="20" />
+	<bean id="dataSource_1" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close" p:driverClass="${driver}" p:jdbcUrl="${url}"
+		p:user="${account}" p:password="${password}" p:maxPoolSize="200"
+		p:minPoolSize="2" p:initialPoolSize="2" p:maxIdleTime="20" />
+	<!-- 定义Hibernate的SessionFactory，并依赖注入数据源，注入上面定义的dataSource -->
+	<bean id="sessionFactory_1"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+		p:dataSource-ref="dataSource_1">
+		<!-- annotatedClasses属性用于列出全部持久化类 -->
+		<property name="annotatedClasses">
+			<list>
+				<!-- common模块中的持久化类 -->
+				<value>org.common.RBAC.domain.Account</value>
+				<value>org.common.RBAC.domain.Role</value>
+				<value>org.common.RBAC.domain.Power</value>
+				<value>org.common.RBAC.domain.Pictures</value>
+				<value>org.common.FDBK.domain.Store</value>
+				<value>org.common.FDBK.domain.Address</value>
+				<value>org.common.FDBK.domain.Province_addr</value>
+				<value>org.common.FDBK.domain.City_addr</value>
+				<value>org.common.FDBK.domain.Areacounty_addr</value>
+				<value>org.common.FDBK.domain.Goods</value>
+				<value>org.common.FDBK.domain.Comment</value>
+				<value>org.common.FDBK.domain.Business</value>
+				<value>org.common.FDBK.domain.Collection</value>
+			</list>
+		</property>
+
+		<!-- 定义Hibernate的SessionFactory的属性 -->
+		<property name="hibernateProperties">
+			<!-- 指定数据库方言、是否自动建表、是否生成SQL语句等 -->
+			<value>
+				hibernate.current_session_context_class=org.springframework.orm.hibernate5.SpringSessionContext
+				hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+				# hibernate.hbm2ddl.auto=update
+				# hibernate.show_sql=true
+				hibernate.format_sql=true
+				hibernate.max_fetch_depth=3
+				hibernate.autoReconnect=true
+			</value>
+		</property>
+	</bean>
+	<!-- 配置DAO组件的模板 -->
+	<bean id="daoTemplate" abstract="true" lazy-init="true"
+		p:sessionFactory-ref="sessionFactory_1" />
+	<!-- 引入common模块的配置文件 -->
+	<import resource="/CommonsBeans.xml" />
+	<!-- ******************************************************* -->
+	<!-- 注解的配置 -->
+	<context:component-scan base-package="cn.zlb.dao,cn.zlb.service,cn.zlb.tools">
+	</context:component-scan>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<!-- <prop key="hibernate.autoReconnect">true</prop> -->
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>cn/zlb/entity/TAccountModify.hbm.xml</value>
+				<value>cn/zlb/entity/TCheap.hbm.xml</value>
+				<value>cn/zlb/entity/TCustomer.hbm.xml</value>
+				<value>cn/zlb/entity/TBusiness.hbm.xml</value>
+				<value>cn/zlb/entity/TLogininfo.hbm.xml</value>
+
+				<value>cn/zlb/entity/TComment.hbm.xml</value>
+				<value>cn/zlb/entity/TGoods.hbm.xml</value>
+				<value>cn/zlb/entity/TOrder.hbm.xml</value>
+				<value>cn/zlb/entity/TRole.hbm.xml</value>
+				<value>cn/zlb/entity/TStore.hbm.xml</value>
+				<value>cn/zlb/entity/TPictures.hbm.xml</value>
+				<value>cn/zlb/entity/TPower.hbm.xml</value>
+
+				<value>cn/zlb/entity/TStoreCategory.hbm.xml</value>
+				<value>cn/zlb/entity/TCart.hbm.xml</value>
+				<value>cn/zlb/entity/TItemorder.hbm.xml</value>
+				<value>cn/zlb/entity/TAddress.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+</beans> 

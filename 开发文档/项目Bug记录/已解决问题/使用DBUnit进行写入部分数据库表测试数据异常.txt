@@ -1,0 +1,88 @@
+问题记录时间：2017年5月23日20:14:06
+问题级别：严重(但可以解决)
+问题记录：无法写入将测试数据文件写入数据库
+问题场景：在编写的过程中写了几个测试数据文件，在其单独编写测试的时候没有任何问题，然和在运行Maven的test的时候顺序执行这些测试的时候就会报下面的异常。
+问题原因：假设我便写了两个测试文件A和B，其中A中包含t_a和t_x表测试数据，而B中包含t_a和t_z表测试数据，而t_x于t_a是外键关联关系，同样t_z和t_a是外键关联关系，
+	而DBUnit写入测试数据文件的过程是：
+		先从A文件开始——>删除t_a表和t_x表中的数据，然后写入A文件中的数据，此时数据库中是空的，或者没有关联关系，所以可以正常写入。
+		然后开始从B文件开始——>删除t_a表和t_z表中的数据，然后写入B文件中的数据，此时A文件中的文件已经写入，此时t_x中包含了关联t_a的外键约束，此时你先删除t_a表就会报以下异常。
+解决思路：导入数据库表中的数据的时候清空整个数据库中的数据。
+
+解决方案：
+ 1.	将所有的测试文件都写到一个文件中，这样就不会造成冲突的发生。
+ 2. 在测试文件中发生有关联关系的数据库表中写入一条空数据，这样DBUnit就会清空这个表。
+ 3. 最佳方式就是可以采用更新的方式进行写入测试时数据，然后利用Spring-test的自动回滚功能回复原状。
+ 例如:
+	@Test
+	@DatabaseSetup(type=DatabaseOperation.REFRESH,value="classpath:DbUnit_xml/RBAC_testData.xml")
+	
+
+建议：
+	在单元测试的时候可以将单个测试所欲要的测试写入到一个测试文件中，这样减小了每次测试所操作的数据的量。
+	在向数据库中写入数据的时候（这个时候是想将所有的测试数据永久写入到数据库中，不进行回撤）那么就可以将所有的测试文件合并到单独一个文件中然后进行写入。
+示例：
+	所有单元测试采用的测试数据是有针对性的，而且每次执行单个单元测试之前会写入，当执行完成后又会被恢复原状；而org.common.test.daoTes.TestWriteData.testWriteALL的目的是将数据永久性的写入到数据库中。
+-----------------------------------控制台异常记录-----------------------------------
+#1495541871011 | took 75ms | statement | connection 2|delete from t_store
+;
+#1495541871087 | took 76ms | statement | connection 2|delete from t_goods
+;
+#1495541871110 | took 22ms | statement | connection 2|delete from t_address
+;
+#1495541871305 | took 194ms | statement | connection 2|delete from t_pictures
+;
+com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Cannot delete or update a parent row: a foreign key constraint fails (`dftsms_test`.`t_customer`, CONSTRAINT `FK6jr3uk671fvls4q4e2aximohv` FOREIGN KEY (`fk_picture`) REFERENCES `t_pictures` (`pk_pic_id`))
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:935)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3973)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3909)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2527)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2680)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2486)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2444)
+	at com.mysql.jdbc.StatementImpl.executeInternal(StatementImpl.java:845)
+	at com.mysql.jdbc.StatementImpl.execute(StatementImpl.java:745)
+	at com.p6spy.engine.wrapper.StatementWrapper.execute(StatementWrapper.java:114)
+	at org.dbunit.database.statement.SimpleStatement.executeBatch(SimpleStatement.java:69)
+	at org.dbunit.operation.DeleteAllOperation.execute(DeleteAllOperation.java:126)
+	at org.dbunit.operation.CompositeOperation.execute(CompositeOperation.java:79)
+	at org.common.test.util.DBUnit_Util.WriteInfoOfTestDataIntoDB(DBUnit_Util.java:145)
+	at org.common.test.daoTest.TestWriteData.testWriteFDBK(TestWriteData.java:21)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:75)
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:86)
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:84)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:254)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:89)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:70)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:193)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)
+
+异常简单说明：
+	在删除t_pictures表的时候提示其还有外键依赖，所以造成无法删除，而包含外键的表是`dftsms_test`.`t_customer`。
+	带#的记录是使用p6spy进行记录的底层数据库执行的过程。

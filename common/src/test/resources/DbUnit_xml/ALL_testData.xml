@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- *************RBAC测试数据****************** -->
+	<!-- t_pictures数据表数据 -->
+	<t_pictures PK_PIC_ID="0011" PIC_ATTR="1" PIC_DES="描述1"
+		PIC_URL="URL1" />
+	<t_pictures PK_PIC_ID="0021" PIC_ATTR="2" PIC_DES="描述2"
+		PIC_URL="URL2" />
+
+	<!-- t_customer数据表数据 -->
+	<t_customer PK_CUS_ID="001" CUS_NAME="fanxiaobin" CUS_PASS="123"
+		CUS_SEX="1" CUS_EMAIL="577328725@qq.com" CUS_PHONE="18930207737"
+		CUS_TIME="2017-03-25 12:21:00" FK_PICTURE="0011" CUS_STATUS="1"
+		EM_ACTICODE="NULL" EM_STATUS="0" EM_TOKEN_EXPTIME="NULL" />
+	<t_customer PK_CUS_ID="002" CUS_NAME="范晓宾" CUS_PASS="123"
+		CUS_SEX="1" CUS_EMAIL="1475610721@qq.com" CUS_PHONE="18930207738"
+		CUS_TIME="2017-03-25 12:21:00" FK_PICTURE="0021" CUS_STATUS="1"
+		EM_ACTICODE="NULL" EM_STATUS="0" EM_TOKEN_EXPTIME="NULL" />
+
+	<!-- t_role数据表数据 -->
+	<t_role PK_ROLE_ID="001" ROL_DESCRIBE="游客" />
+	<t_role PK_ROLE_ID="002" ROL_DESCRIBE="管理员" />
+
+	<!-- t_power数据表数据 -->
+	<t_power PK_POWER_ID="001" POW_DESCRIBE="普通" />
+	<t_power PK_POWER_ID="002" POW_DESCRIBE="超级权限" />
+
+	<!-- t_customer_role关联表数据 -->
+	<t_customer_role FK_CUSTOMER="001" FK_ROLE="001" />
+	<t_customer_role FK_CUSTOMER="002" FK_ROLE="002" />
+
+	<!-- t_role_power关联表数据 -->
+	<t_role_power FK_ROLE="001" FK_POWER="001" />
+	<t_role_power FK_ROLE="002" FK_POWER="002" />
+
+	<!-- *************FDBK测试数据****************** -->
+	<!-- t_pictures数据表数据 -->
+	<t_pictures PK_PIC_ID="001" PIC_ATTR="1"
+		PIC_URL="/dftsms-web/PIC/00940fd9775cfcf237c5c28ef88fd35c72880.jpg"
+		PIC_DES="URL1" />
+	<t_pictures PK_PIC_ID="002" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/09374de027b3a6c62e63dbe78f2f3a8e188029.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="003" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/15eae3780a9d49ff4ae88607a282c78524576.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="004" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/1d8aa7f1ef0946e602d4ef5317388d831457.png"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="005" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/424019d742dbb6b0193ce7ac54a843201104.png"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="006" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/54978778394cf2fdda910745c6dcb9b29439.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="007" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/6982073e1e7fc7cdf7af4d6acdb9771f49152.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="008" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/8aaa0fb9b6bdac74f79b150303e86f3741976.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="009" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/a4b89f219793d2e0c6a3b537ef294af499688.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="010" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/a826a319c953f922e306018cee3bb4b122528.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="011" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/a833d60049ab20a192216d208135fbff25769.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="012" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/b3e95fd910bf569792cbb4129242a9e450596.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="013" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/bf32ecfb2a155268b262771bfe7a3ee577336.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="014" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/c26fef24c37d933a55a64489dbef8fd337257.jpg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="015" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/fa71562584943441df627ec581ea068e14036.jpeg"
+		PIC_DES="URL2" />
+	<t_pictures PK_PIC_ID="016" PIC_ATTR="2"
+		PIC_URL="/dftsms-web/PIC/fe96ad1ff6f84fbab924faaad1369cb1236457.jpg"
+		PIC_DES="URL2" />
+
+	<!-- t_address数据表数据 -->
+	<t_address pk_add_id="001" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.504526" add_Y="36.575491" />
+	<t_address pk_add_id="002" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.509011" add_Y="36.575353" />
+	<t_address pk_add_id="003" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.506329" add_Y="36.572097" />
+	<t_address pk_add_id="004" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.495085" add_Y="36.574802" />
+	<t_address pk_add_id="005" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.498969" add_Y="36.576611" />
+	<t_address pk_add_id="006" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.506887" add_Y="36.577146" />
+	<t_address pk_add_id="007" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.490429" add_Y="36.575078" />
+	<t_address pk_add_id="008" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.497295" add_Y="36.576508" />
+	<t_address pk_add_id="009" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.497531" add_Y="36.58004" />
+	<t_address pk_add_id="010" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.4956" add_Y="36.581574" />
+	<t_address pk_add_id="011" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.504043" add_Y="36.567995" />
+	<t_address pk_add_id="012" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.511178" add_Y="36.582573" />
+	<t_address pk_add_id="013" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.496576" add_Y="36.567504" />
+	<t_address pk_add_id="014" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.502359" add_Y="36.567624" />
+	<t_address pk_add_id="015" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.49487" add_Y="36.570218" />
+	<t_address pk_add_id="016" fk_add_area="130401" add_concrete="学院北路与滏河南大街交叉口"
+		add_X="114.490815" add_Y="36.568503" />
+	<!-- t_goods数据表数据 -->
+	<t_goods PK_GOO_ID="001" GOO_NAME="商品1" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="001" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="253" FK_PICTURE_BIG="001" FK_PICTURE_SMALL="001"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="002" GOO_NAME="商品2" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="002" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="352" FK_PICTURE_BIG="002" FK_PICTURE_SMALL="008"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="003" GOO_NAME="商品3" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="003" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="425" FK_PICTURE_BIG="003" FK_PICTURE_SMALL="003"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="004" GOO_NAME="商品1" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="001" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="254" FK_PICTURE_BIG="004" FK_PICTURE_SMALL="004"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="005" GOO_NAME="商品2" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="002" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="964" FK_PICTURE_BIG="005" FK_PICTURE_SMALL="005"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="006" GOO_NAME="商品3" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="003" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="785" FK_PICTURE_BIG="006" FK_PICTURE_SMALL="006"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="007" GOO_NAME="商品1" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="001" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="153" FK_PICTURE_BIG="007" FK_PICTURE_SMALL="007"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="008" GOO_NAME="商品2" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="002" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="63" FK_PICTURE_BIG="008" FK_PICTURE_SMALL="008"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="009" GOO_NAME="商品3" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="003" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="15" FK_PICTURE_BIG="009" FK_PICTURE_SMALL="009"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="010" GOO_NAME="商品1" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="001" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="216" FK_PICTURE_BIG="010" FK_PICTURE_SMALL="010"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="011" GOO_NAME="商品2" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="002" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="789" FK_PICTURE_BIG="011" FK_PICTURE_SMALL="011"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="012" GOO_NAME="商品3" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="003" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="963" FK_PICTURE_BIG="012" FK_PICTURE_SMALL="012"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="013" GOO_NAME="商品1" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="001" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="452" FK_PICTURE_BIG="013" FK_PICTURE_SMALL="013"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="014" GOO_NAME="商品2" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="002" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="964" FK_PICTURE_BIG="014" FK_PICTURE_SMALL="014"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="015" GOO_NAME="商品3" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="003" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="145" FK_PICTURE_BIG="015" FK_PICTURE_SMALL="015"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+	<t_goods PK_GOO_ID="016" GOO_NAME="商品3" GOO_PRICE="40"
+		GOO_CURRPRICE="20" FK_STORE="003" FK_STORE_CATEGORY="001"
+		GOO_SALEVOLUME="365" FK_PICTURE_BIG="016" FK_PICTURE_SMALL="016"
+		GOO_EXTEND01="ceshi" GOO_EXTEND02="ceshi" GOO_EXTEND03="ceshi" />
+
+	<!-- t_store数据表数据 -->
+	<t_store fk_sto_id="001" sto_name="黄焖鸡米饭" fk_picture="001"
+		sto_status="1" sto_score="1" fk_address="001" fk_goods="001" />
+	<t_store fk_sto_id="002" sto_name="一品鲜牛" fk_picture="002"
+		sto_status="2" sto_score="2" fk_address="002" fk_goods="002" />
+	<t_store fk_sto_id="003" sto_name="第一佳大鸡排" fk_picture="003"
+		sto_status="3" sto_score="3" fk_address="003" fk_goods="003" />
+	<t_store fk_sto_id="004" sto_name="填鸭梨烤鸭店" fk_picture="004"
+		sto_status="1" sto_score="4" fk_address="004" fk_goods="004" />
+	<t_store fk_sto_id="005" sto_name="西安分会" fk_picture="005"
+		sto_status="2" sto_score="2" fk_address="005" fk_goods="005" />
+	<t_store fk_sto_id="006" sto_name="吉野家(上地三街点)" fk_picture="006"
+		sto_status="3" sto_score="3" fk_address="006" fk_goods="006" />
+	<t_store fk_sto_id="007" sto_name="山西面食馆" fk_picture="007"
+		sto_status="1" sto_score="1" fk_address="007" fk_goods="007" />
+	<t_store fk_sto_id="008" sto_name="水煮鱼" fk_picture="008"
+		sto_status="2" sto_score="5" fk_address="008" fk_goods="008" />
+	<t_store fk_sto_id="009" sto_name="来自星星的韩式烤鸡" fk_picture="009"
+		sto_status="3" sto_score="3" fk_address="009" fk_goods="009" />
+	<t_store fk_sto_id="010" sto_name="一茶一坐(邯山区店)" fk_picture="010"
+		sto_status="1" sto_score="5" fk_address="010" fk_goods="010" />
+	<t_store fk_sto_id="011" sto_name="这个不规范" fk_picture="011"
+		sto_status="2" sto_score="2" fk_address="011" fk_goods="011" />
+	<t_store fk_sto_id="012" sto_name="老家肉饼" fk_picture="012"
+		sto_status="3" sto_score="6" fk_address="012" fk_goods="012" />
+	<t_store fk_sto_id="013" sto_name="护国寺小吃" fk_picture="013"
+		sto_status="1" sto_score="3" fk_address="013" fk_goods="013" />
+	<t_store fk_sto_id="014" sto_name="嘉禾一品粥" fk_picture="014"
+		sto_status="2" sto_score="4" fk_address="014" fk_goods="014" />
+	<t_store fk_sto_id="015" sto_name="西少爷肉夹馍" fk_picture="015"
+		sto_status="3" sto_score="3" fk_address="015" fk_goods="015" />
+	<t_store fk_sto_id="016" sto_name="杂粮煎饼" fk_picture="016"
+		sto_status="3" sto_score="6" fk_address="016" fk_goods="016" />
+</dataset>

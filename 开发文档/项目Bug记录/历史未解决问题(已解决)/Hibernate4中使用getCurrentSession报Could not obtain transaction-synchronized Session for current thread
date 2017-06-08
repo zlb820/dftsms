@@ -1,0 +1,9 @@
+问题记录时间：2017年4月26日09:25:35
+问题级别：严重
+问题记录：org.hibernate.HibernateException: Could not obtain transaction-synchronized Session for current thread
+问题原因：Hibernate 4中注入SessionFactory，然后通过getCurrentSession()获取Session的时候一直报错，如果使用openSession获取就不会有异常，但是查询这两种方式的区别，还是使用getCurrentSession更加安全。
+问题解决过程：
+	上网查阅大量资料，经纠正是配置文件配置出错，原因是使用最新的版本，却使用老版本的配置，主要是Hibernate的配置，如果细心的话会发现一些Hibernate4这个字眼，这个就是出错原因，我使用的是Hibernate 5.x版本，所以将其纠正为Hibernate5就可以了。
+	让我感到诧异的是，我虽然使用的是Hibernate5，配置Hibernate4这一类的字眼的时候，使用ctrl+鼠标左键，是可以找到的(显示超链接)，既然存在，为什么就不能用呢？很是诧异。
+参考资料：
+http://www.bubuko.com/infodetail-333046.html

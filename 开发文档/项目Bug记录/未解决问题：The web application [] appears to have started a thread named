@@ -1,0 +1,11 @@
+问题记录时间：2017年5月20日16:22:01
+问题级别：警告
+问题记录：The web application [] appears to have started a thread named [Abandoned connection cleanup thread] but has failed to stop it.
+问题场景：每一次关闭服务器的时候会出现该警告。
+问题原因：
+
+-----------------------------------控制台异常记录-----------------------------------
+警告: The web application [dftsms-web] appears to have started a thread named [Abandoned connection cleanup thread] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:143)
+ com.mysql.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:40)

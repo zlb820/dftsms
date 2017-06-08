@@ -1,0 +1,41 @@
+问题记录时间：2017年4月22日21:58:01
+问题级别：警告
+问题记录：'version' contains an expression but should be a constant.
+问题原因：Maven POM中的版本声明中应该是一个常数，但程序中使用了表达式
+	在parent的POM中使用表达式来指定各个依赖以及项目的版本，这样有利于后期版本的统一升级，但是如果这样做却报如下警告。
+-----------------------------------控制台异常记录-----------------------------------
+[WARNING] Some problems were encountered while building the effective model for edu.hebeu.dftsms:dftsms-web:war:0.0.1-SNAPSHOT
+[WARNING] 'version' contains an expression but should be a constant. @ edu.hebeu.dftsms:dftsms:${project.version}, E:\Workspace\EE\dftsms\pom.xml, line 25, column 11
+[WARNING] 'dependencyManagement.dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.apache.struts:struts2-json-plugin:jar -> duplicate declaration of version ${struts2.version} @ edu.hebeu.dftsms:dftsms:${project.version}, E:\Workspace\EE\dftsms\pom.xml, line 138, column 16
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for edu.hebeu.dftsms:common:jar:0.0.1-SNAPSHOT
+[WARNING] 'version' contains an expression but should be a constant. @ edu.hebeu.dftsms:dftsms:${project.version}, E:\Workspace\EE\dftsms\pom.xml, line 25, column 11
+[WARNING] 'dependencyManagement.dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.apache.struts:struts2-json-plugin:jar -> duplicate declaration of version ${struts2.version} @ edu.hebeu.dftsms:dftsms:${project.version}, E:\Workspace\EE\dftsms\pom.xml, line 138, column 16
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for edu.hebeu.dftsms:dftsms:pom:0.0.1-SNAPSHOT
+[WARNING] 'version' contains an expression but should be a constant. @ edu.hebeu.dftsms:dftsms:${project.version}, E:\Workspace\EE\dftsms\pom.xml, line 25, column 11
+[WARNING] 'dependencyManagement.dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.apache.struts:struts2-json-plugin:jar -> duplicate declaration of version ${struts2.version} @ edu.hebeu.dftsms:dftsms:${project.version}, E:\Workspace\EE\dftsms\pom.xml, line 138, column 16
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+
+-----------------------------------暂时搜索解决办法-----------------------------------
+参考网址：
+http://www.javablog.be/maven-version-contains-expression/
+http://blog.csdn.net/chs_jdmdr/article/details/42420373
+#较为接近问题的链接
+http://www.cnblogs.com/beiyeren/p/4275032.html
+
+暂时搜索到的解决方案：
+	由于Maven 3中不允许出现version为非常量值的情况，这要可以借助于第三方插件(versions-maven-plugin)来帮我们自动完成升级版本的工作。
+
+versions-maven-plugin插件官网：http://www.mojohaus.org/versions-maven-plugin/
+
+POM配置：
+<dependency>  
+    <groupId>org.codehaus.mojo</groupId>  
+    <artifactId>versions-maven-plugin</artifactId>  
+    <version>2.3</version>  
+</dependency> 

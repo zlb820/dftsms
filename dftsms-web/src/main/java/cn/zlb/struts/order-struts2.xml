@@ -1,0 +1,51 @@
+<!DOCTYPE struts PUBLIC
+  "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+  "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="order" namespace="/ord" extends="struts-default,json-default" >
+		<action name="order_*" class="cn.zlb.action.OrderAction" method="order{1}">
+		 
+			 
+    		<result name="notFoundResult" type="json">
+    				<param name="root">notFound</param>
+    		</result>
+    		<result name="cMesResult" type="json">
+    				<param name="root">cMes</param>
+    		</result>
+    		<result name="mesResult" type="json">
+    				<param name="root">mes</param>
+    		</result>
+    		<result name="orderResult" type="json">
+    				<param name="root">orderDetail</param>
+    		</result>
+		</action>
+	</package>
+	<!-- <package name="order" namespace="/ord" extends="struts-default" >
+		<action name="order_*" class="cn.zlb.action.OrderAction" method="order{1}">
+			<result name="success"  >
+			/WebRoot/bus/success.jsp
+			</result>
+			<result name="qrcode">
+				qrcode.jsp
+			</result>
+			
+		</action>
+	</package> -->
+	
+    <package name="order_and" namespace="/and" extends="struts-default,json-default">
+    	<action name="ord_*" class="cn.zlb.action.android.OrderActionAnd" method="order{1}">
+    		<result name="orderResult" type="json">
+    				<param name="root">orderInfo</param>
+    		</result>
+    		<result name="orderAllResult" type="json">
+    				<param name="root">orderAll</param>
+    		</result>
+    		<result name="notFoundResult" type="json">
+    				<param name="root">notFound</param>
+    		</result>
+    	</action>
+    
+    </package>
+    
+  
+</struts>

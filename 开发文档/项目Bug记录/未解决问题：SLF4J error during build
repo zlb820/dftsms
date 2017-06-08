@@ -1,0 +1,28 @@
+问题记录时间：2017年4月23日22:43:38
+问题级别：警告
+问题记录：Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+问题原因：可能是self4j与Log4j冲突
+	在使用DBUnit进行测试的时候，利用DBUnit_Util进行写入数据的时候报如下错误。
+-----------------------------------控制台异常记录-----------------------------------
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+-----------------------------------暂时搜索解决办法-----------------------------------
+<dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-api</artifactId>
+	<version>1.7.13</version>
+</dependency>
+<dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-log4j12</artifactId>
+	<version>1.7.13</version>
+</dependency>
+<dependency>
+	<groupId>log4j</groupId>
+	<artifactId>log4j</artifactId>
+	<version>1.2.17</version>
+</dependency>
+参考链接：
+http://stackoverflow.com/questions/12626277/java-maven-slf4j-error-during-build
+http://blog.csdn.net/tianjun2012/article/details/50571178

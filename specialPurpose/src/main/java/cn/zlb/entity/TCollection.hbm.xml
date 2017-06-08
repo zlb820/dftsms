@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="cn.zlb.entity.TCollection" table="t_collection" catalog="dftsms" lazy="false">
+        <id name="pkColId" type="java.lang.String">
+            <column name="pk_col_id" length="32" />
+           <!--  <generator class="uuid.string" /> -->
+        </id>
+        
+         <property name="colTime" type="java.sql.Timestamp">
+            <column name="col_time"   />
+        </property>
+        <many-to-one name="TStore" class="cn.zlb.entity.TStore"   unique="true">
+            <column name="fk_store" length="32" />
+        </many-to-one>
+        <many-to-one name="TCustomer" class="cn.zlb.entity.TCustomer" unique="true">
+            <column name="fk_customer" length="32" />
+        </many-to-one>
+        
+    </class>
+</hibernate-mapping>
+
